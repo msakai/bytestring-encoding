@@ -13,7 +13,6 @@ import Control.Exception (assert)
 import Control.Monad
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Unsafe as B
-import qualified Data.ByteString.Builder as Builder
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text as T
 import qualified Data.Text.Foreign as T
