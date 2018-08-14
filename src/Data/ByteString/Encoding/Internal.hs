@@ -9,7 +9,7 @@ module Data.ByteString.Encoding.Internal
   , decodeWith
   ) where
 
-import Control.Exception (assert)
+import Control.Exception
 import Control.Monad
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Unsafe as B
@@ -31,9 +31,9 @@ encodeWith :: Enc.TextEncoding -> Int -> Int -> TL.Text -> BL.ByteString
 encodeWith enc inBufSize outBufSize = encodeStringWith enc inBufSize outBufSize . TL.unpack
 
 encodeStringWith :: Enc.TextEncoding -> Int -> Int -> String -> BL.ByteString
-encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s = BL.fromChunks $ unsafePerformIO $ do
-  Enc.BufferCodec{ .. } <- mkTextEncoder
-
+encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s =
+ BL.fromChunks $ unsafePerformIO $
+ bracket mkTextEncoder Enc.close $ \Enc.BufferCodec{ .. } -> do
   let fillInBuf :: String -> CharBuffer -> IO (String, CharBuffer)
       fillInBuf s buf
         | isEmptyBuffer buf = go s buf{ bufL=0, bufR=0 }
@@ -96,9 +96,9 @@ decode :: Enc.TextEncoding -> BL.ByteString -> TL.Text
 decode enc b = decodeWith enc 1024 1024 b
 
 decodeWith :: Enc.TextEncoding -> Int -> Int -> BL.ByteString -> TL.Text
-decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsafePerformIO $ do
-  Enc.BufferCodec{ .. } <- mkTextDecoder
-
+decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b =
+ TL.fromChunks $ unsafePerformIO $ do
+ bracket mkTextDecoder Enc.close $ \Enc.BufferCodec{ .. } -> do
   let fillInBuf :: [B.ByteString] -> Buffer Word8 -> IO ([B.ByteString], Buffer Word8)
       fillInBuf bs buf
         | isEmptyBuffer buf = go bs buf{ bufL=0, bufR=0 }
