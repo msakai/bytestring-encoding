@@ -29,7 +29,7 @@ library:
 
 tests:
   bytestring-encoding-test:
-    main:                test.hs
+    main:                Main.hs
     source-dirs:         test
     ghc-options:
     - -threaded
@@ -37,6 +37,8 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - bytestring-encoding
+    - QuickCheck
     - tasty >=0.10.1
+    - tasty-hunit
     - tasty-quickcheck
     - tasty-th

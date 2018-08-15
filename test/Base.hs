@@ -1,6 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
+module Base (baseTestGroup) where
 
 import qualified Data.ByteString.Encoding as Enc
 import qualified Data.ByteString.Encoding.Internal as Enc
@@ -8,6 +10,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Lazy.Encoding as TL
 
+import Test.Tasty
 import Test.Tasty.QuickCheck
 import Test.Tasty.TH
 
@@ -60,7 +63,6 @@ prop_encode_decode_utf32be :: Property
 prop_encode_decode_utf32be = checkRoundTrip Enc.utf32be
 
 -- ---------------------------------------------------------------------
--- Test harness
 
-main :: IO ()
-main = $(defaultMainGenerator)
+baseTestGroup :: TestTree
+baseTestGroup = $(testGroupGenerator)
