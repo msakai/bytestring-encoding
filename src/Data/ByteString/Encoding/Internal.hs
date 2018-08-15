@@ -31,9 +31,9 @@ encodeWith :: Enc.TextEncoding -> Int -> Int -> TL.Text -> BL.ByteString
 encodeWith enc inBufSize outBufSize = encodeStringWith enc inBufSize outBufSize . TL.unpack
 
 encodeStringWith :: Enc.TextEncoding -> Int -> Int -> String -> BL.ByteString
-encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s =
- BL.fromChunks $ unsafePerformIO $
- bracket mkTextEncoder Enc.close $ \Enc.BufferCodec{ .. } -> do
+encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s = BL.fromChunks $ unsafePerformIO $ do
+  Enc.BufferCodec{ .. } <- mkTextEncoder
+
   let fillInBuf :: String -> CharBuffer -> IO (String, CharBuffer)
       fillInBuf s buf
         | isEmptyBuffer buf = go s buf{ bufL=0, bufR=0 }
@@ -61,6 +61,7 @@ encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s =
         if isEmptyBuffer inBuf1 then do
           assert (null s') $ return ()
           (m, _outBuf') <- flushOutBuf outBuf
+          close
           return m
         else do
           (ret, inBuf2, outBuf2) <- encode inBuf1 outBuf
@@ -96,9 +97,9 @@ decode :: Enc.TextEncoding -> BL.ByteString -> TL.Text
 decode enc b = decodeWith enc 1024 1024 b
 
 decodeWith :: Enc.TextEncoding -> Int -> Int -> BL.ByteString -> TL.Text
-decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b =
- TL.fromChunks $ unsafePerformIO $ do
- bracket mkTextDecoder Enc.close $ \Enc.BufferCodec{ .. } -> do
+decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsafePerformIO $ do
+  Enc.BufferCodec{ .. } <- mkTextDecoder
+
   let fillInBuf :: [B.ByteString] -> Buffer Word8 -> IO ([B.ByteString], Buffer Word8)
       fillInBuf bs buf
         | isEmptyBuffer buf = go bs buf{ bufL=0, bufR=0 }
@@ -154,6 +155,7 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b =
         if isEmptyBuffer inBuf1 then do
           assert (null bs') $ return ()
           (m, _outBuf') <- flushOutBuf outBuf workspace
+          close
           return m
         else do
           (ret, inBuf2, outBuf2) <- encode inBuf1 outBuf
