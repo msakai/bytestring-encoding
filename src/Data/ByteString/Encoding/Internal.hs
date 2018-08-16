@@ -19,6 +19,9 @@ import qualified Data.Text.Foreign as T
 import qualified Data.Text.Lazy as TL
 import Data.Word
 import Foreign
+import qualified Foreign.Concurrent as Conc
+import Foreign.ForeignPtr (touchForeignPtr)
+import Foreign.Ptr (nullPtr)
 import qualified GHC.IO.Encoding as Enc
 import GHC.IO.Buffer
 import System.IO.Unsafe
@@ -33,6 +36,7 @@ encodeWith enc inBufSize outBufSize = encodeStringWith enc inBufSize outBufSize 
 encodeStringWith :: Enc.TextEncoding -> Int -> Int -> String -> BL.ByteString
 encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s = BL.fromChunks $ unsafePerformIO $ do
   Enc.BufferCodec{ .. } <- mkTextEncoder
+  fp <- Conc.newForeignPtr nullPtr close
 
   let fillInBuf :: String -> CharBuffer -> IO (String, CharBuffer)
       fillInBuf s buf
@@ -61,7 +65,7 @@ encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s = BL.fromChunks $
         if isEmptyBuffer inBuf1 then do
           assert (null s') $ return ()
           (m, _outBuf') <- flushOutBuf outBuf
-          close
+          touchForeignPtr fp
           return m
         else do
           (ret, inBuf2, outBuf2) <- encode inBuf1 outBuf
@@ -99,6 +103,7 @@ decode enc b = decodeWith enc 1024 1024 b
 decodeWith :: Enc.TextEncoding -> Int -> Int -> BL.ByteString -> TL.Text
 decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsafePerformIO $ do
   Enc.BufferCodec{ .. } <- mkTextDecoder
+  fp <- Conc.newForeignPtr nullPtr close
 
   let fillInBuf :: [B.ByteString] -> Buffer Word8 -> IO ([B.ByteString], Buffer Word8)
       fillInBuf bs buf
@@ -155,7 +160,7 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsaf
         if isEmptyBuffer inBuf1 then do
           assert (null bs') $ return ()
           (m, _outBuf') <- flushOutBuf outBuf workspace
-          close
+          touchForeignPtr fp
           return m
         else do
           (ret, inBuf2, outBuf2) <- encode inBuf1 outBuf
