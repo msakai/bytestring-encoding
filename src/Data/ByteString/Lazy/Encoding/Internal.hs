@@ -2,7 +2,7 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
-module Data.ByteString.Encoding.Internal
+module Data.ByteString.Lazy.Encoding.Internal
   ( encode
   , encodeWith
   , decode

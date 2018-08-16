@@ -4,8 +4,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 module CodePage (codepageTestGroup) where
 
-import qualified Data.ByteString.Encoding as Enc
-import qualified Data.ByteString.Encoding.Internal as Enc
+import qualified Data.ByteString.Lazy.Encoding as Enc
+import qualified Data.ByteString.Lazy.Encoding.Internal as Enc
 import qualified Data.ByteString.Lazy as BL
 
 import qualified Test.QuickCheck.Monadic as QM
