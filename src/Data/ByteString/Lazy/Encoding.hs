@@ -1,10 +1,23 @@
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Data.ByteString.Lazy.Encoding
+-- Copyright   :  (c) Masahiro Sakai 2018
+-- License     :  BSD-style
+-- 
+-- Maintainer  :  masahiro.sakai@gmail.com
+-- Stability   :  provisional
+-- Portability :  non-portable
+--
+-- 'BL.ByteString' ↔ 'TL.Text' converter based on "GHC.IO.Encoding".
+--
+-----------------------------------------------------------------------------
 module Data.ByteString.Lazy.Encoding
   (
   -- * Converter functions
     encode
   , decode
 
-  -- * Unicode encodings
+  -- * Text encodings (re-export from "System.IO")
   , TextEncoding
   , latin1
   , utf8

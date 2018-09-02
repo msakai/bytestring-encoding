@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_HADDOCK hide #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -26,7 +27,7 @@ import qualified GHC.IO.Encoding as Enc
 import GHC.IO.Buffer
 import System.IO.Unsafe
 
-
+-- | Encode a lazy 'TL.Text' into a lazy 'BL.ByteString' using a given 'Enc.TextEncoding'.
 encode :: Enc.TextEncoding -> TL.Text -> BL.ByteString
 encode enc = encodeWith enc 1024 1024
 
@@ -97,6 +98,7 @@ encodeStringWith Enc.TextEncoding{ .. } inBufSize outBufSize s = BL.fromChunks $
   loop s inBuf outBuf
 
 
+-- | Decode a lazy 'BL.ByteString' to a lazy 'TL.Text' using a given 'Enc.TextEncoding'.
 decode :: Enc.TextEncoding -> BL.ByteString -> TL.Text
 decode enc b = decodeWith enc 1024 1024 b
 
