@@ -40,6 +40,12 @@ jobs:
           path: ~/.stack
           key: ${{ runner.os }}-${{ matrix.ghc }}-stack
 
+      # https://github.com/commercialhaskell/stack/issues/5405
+      - name: Clear setup-exe-cache directory
+        if: runner.os == 'macOS'
+        continue-on-error: true
+        run: rm -r ~/.stack/setup-exe-cache
+
       - name: Build
         run: |
           echo "resolver: ${{ matrix.resolver }}" > stack.yaml
