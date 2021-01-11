@@ -1,0 +1,57 @@
+on: [push, pull_request]
+name: build
+jobs:
+  bytestring-encoding:
+    name: bytestring-encoding
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        ghc: ['8.4.4', '8.6.5', '8.8.4', '8.10.2']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - ghc: '8.4.4'
+            resolver: 'lts-12.26'
+            flags: ''
+          - ghc: '8.6.5'
+            resolver: 'lts-14.27'
+            flags: ''
+          - ghc: '8.8.4'
+            resolver: 'lts-16.27'
+            coveralls: true
+            flags: '--coverage'
+          - ghc: '8.10.2'
+            resolver: 'nightly-2020-11-01'
+            flags: ''
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: haskell/actions/setup@v1
+        name: Setup Haskell
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          enable-stack: true
+          stack-version: 'latest'
+          stack-no-global: true
+          stack-setup-ghc: true
+
+      - uses: actions/cache@v1
+        name: Cache ~/.stack
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-${{ matrix.ghc }}-stack
+
+      - name: Build
+        run: |
+          echo "resolver: ${{ matrix.resolver }}" > stack.yaml
+          stack build --test --no-run-tests --bench --no-run-benchmarks ${{ matrix.flags }}
+      - name: Test
+        run: stack test ${{ matrix.flags }}
+
+      - name: Coveralls
+        if: matrix.coveralls
+        continue-on-error: true
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: |
+          curl -L https://github.com/lehins/stack-hpc-coveralls/releases/download/v0.0.6.0/shc.tar.gz | tar -xz
+          ./shc --repo-token="$COVERALLS_REPO_TOKEN" bytestring-encoding bytestring-encoding-test
