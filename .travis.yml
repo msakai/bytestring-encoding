@@ -8,7 +8,7 @@ matrix:
   include:
     - env: STACK_YAML=stack-ghc-8.10.yaml
       compiler: ": #GHC 8.10.1"
-    - env: STACK_YAML=stack-ghc-8.8.yaml COVERAGE=1 SHC_GHCVER=8.0.1
+    - env: STACK_YAML=stack-ghc-8.8.yaml SHC_GHCVER=8.0.1
       compiler: ": #GHC 8.8.3"
     - env: STACK_YAML=stack-ghc-8.8.yaml
       compiler: ": #GHC 8.8.3"
