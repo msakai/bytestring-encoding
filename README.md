@@ -2,6 +2,7 @@
 
 [![Build Status (Travis CI)](https://travis-ci.org/msakai/bytestring-encoding.svg?branch=master)](https://travis-ci.org/msakai/bytestring-encoding)
 [![Build status (AppVeyor)](https://ci.appveyor.com/api/projects/status/8pwtxsky05ge0ooc/branch/master?svg=true)](https://ci.appveyor.com/project/msakai/bytestring-encoding/branch/master)
+[![Build Status (GitHub Actions)](https://github.com/msakai/bytestring-encoding/workflows/build/badge.svg)](https://github.com/msakai/bytestring-encoding/actions)
 [![Coverage Status](https://coveralls.io/repos/github/msakai/bytestring-encoding/badge.svg?branch=master)](https://coveralls.io/github/msakai/bytestring-encoding?branch=master)
 [![Hackage](https://img.shields.io/hackage/v/bytestring-encoding.svg)](https://hackage.haskell.org/package/bytestring-encoding)
 [![Hackage Deps](https://img.shields.io/hackage-deps/v/bytestring-encoding.svg)](https://packdeps.haskellers.com/feed?needle=bytestring-encoding)
