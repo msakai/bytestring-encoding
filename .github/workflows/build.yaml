@@ -48,7 +48,7 @@ jobs:
         run: stack test ${{ matrix.flags }}
 
       - name: Coveralls
-        if: matrix.coveralls
+        if: matrix.coveralls && runner.os == 'Linux'
         continue-on-error: true
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
