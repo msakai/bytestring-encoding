@@ -117,15 +117,15 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsaf
           go bbs@(b : bs) buf
             | isFullBuffer buf = return (bbs, buf)
             | B.null b = go bs buf
-            | otherwise = do
+            | otherwise = join $ do
                 B.unsafeUseAsCString b $ \p -> do
                   withBuffer buf $ \q -> do
                     if B.length b <= bufferAvailable buf then do
                       moveBytes (q `plusPtr` bufR buf) p (B.length b)
-                      go bs buf{ bufR = bufR buf + B.length b }
+                      return $ go bs buf{ bufR = bufR buf + B.length b }
                     else do
                       moveBytes (q `plusPtr` bufR buf) p (bufferAvailable buf)
-                      go (B.drop (bufferAvailable buf) b : bs) buf{ bufR = bufR buf + bufferAvailable buf }
+                      return $ go (B.drop (bufferAvailable buf) b : bs) buf{ bufR = bufR buf + bufferAvailable buf }
 
       flushOutBuf :: CharBuffer -> Ptr Word16 -> IO ([T.Text], CharBuffer)
       flushOutBuf buf workspace
