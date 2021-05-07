@@ -127,7 +127,7 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsaf
                       moveBytes (q `plusPtr` bufR buf) p (bufferAvailable buf)
                       go (B.drop (bufferAvailable buf) b : bs) buf{ bufR = bufR buf + bufferAvailable buf }
 
-      flushOutBuf :: CharBuffer -> Ptr Word16 -> IO ([T.Text], CharBuffer)
+      flushOutBuf :: CharBuffer -> ForeignPtr Word16 -> IO ([T.Text], CharBuffer)
       flushOutBuf buf workspace
         | isEmptyBuffer buf = return ([], buf{ bufL=0, bufR=0 })
         | charSize==2 = do
@@ -136,7 +136,8 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsaf
                   p' = castPtr p
               t <- T.fromPtr (p' `plusPtr` bufL buf) (fromIntegral (bufferElems buf))
               return ([t], buf{ bufL=0, bufR=0 })
-        | otherwise = do
+        | otherwise =
+            withForeignPtr workspace $ \workspace' ->
             withBuffer buf $ \p -> do
               let p' :: Ptr Char
                   p' = castPtr p
@@ -145,18 +146,18 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsaf
                     | otherwise = do
                         c <- liftM fromEnum $ peekElemOff p' i
                         if c < 0x10000 then do
-                          pokeElemOff workspace j (fromIntegral c)
+                          pokeElemOff workspace' j (fromIntegral c)
                           f (i+1) (j+1)
                         else do
                           let c' = c - 0x10000
-                          pokeElemOff workspace j (fromIntegral (c' `div` 0x400 + 0xd800))
-                          pokeElemOff workspace (j+1) (fromIntegral (c' `mod` 0x400 + 0xdc00))
+                          pokeElemOff workspace' j (fromIntegral (c' `div` 0x400 + 0xd800))
+                          pokeElemOff workspace' (j+1) (fromIntegral (c' `mod` 0x400 + 0xdc00))
                           f (i+1) (j+2)
               n <- f (bufL buf) 0
-              t <- T.fromPtr workspace (fromIntegral n)
+              t <- T.fromPtr workspace' (fromIntegral n)
               return ([t], buf{ bufL=0, bufR=0 })
 
-      loop :: [B.ByteString] -> Buffer Word8 -> CharBuffer -> Ptr Word16 -> IO [T.Text]
+      loop :: [B.ByteString] -> Buffer Word8 -> CharBuffer -> ForeignPtr Word16 -> IO [T.Text]
       loop bs inBuf outBuf workspace = do
         (bs', inBuf1) <- fillInBuf bs inBuf
         if isEmptyBuffer inBuf1 then do
@@ -190,8 +191,5 @@ decodeWith Enc.TextEncoding{ .. } inBufSize outBufSize b = TL.fromChunks $ unsaf
 
   inBuf <- newByteBuffer inBufSize ReadBuffer
   outBuf <- newCharBuffer outBufSize WriteBuffer
-  if charSize == 2 then do
-    loop (BL.toChunks b) inBuf outBuf nullPtr
-  else do
-    allocaArray (outBufSize * 2) $ \workspace ->
-      loop (BL.toChunks b) inBuf outBuf workspace
+  workspace <- if charSize == 2 then newForeignPtr_ nullPtr else mallocForeignPtrArray (outBufSize * 2)
+  loop (BL.toChunks b) inBuf outBuf workspace
