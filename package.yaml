@@ -42,3 +42,4 @@ tests:
     - tasty-hunit
     - tasty-quickcheck
     - tasty-th
+    - deepseq
