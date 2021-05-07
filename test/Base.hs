@@ -4,14 +4,17 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Base (baseTestGroup) where
 
+import Control.DeepSeq
 import qualified Data.ByteString.Lazy.Encoding as Enc
 import qualified Data.ByteString.Lazy.Encoding.Internal as Enc
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString as B
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Lazy.Encoding as TL
 
 import Test.Tasty
 import Test.Tasty.QuickCheck
+import Test.Tasty.HUnit
 import Test.Tasty.TH
 
 checkEncode :: Enc.TextEncoding -> (TL.Text -> BL.ByteString) -> Property
@@ -61,6 +64,13 @@ prop_encode_decode_utf32le = checkRoundTrip Enc.utf32le
 
 prop_encode_decode_utf32be :: Property
 prop_encode_decode_utf32be = checkRoundTrip Enc.utf32be
+
+case_decoding_long_chunked_string :: IO ()
+case_decoding_long_chunked_string = do
+  let ls = [32752, 32752, 32752, 32752, 32752, 32752, 32752, 32752, 32752, 18193]
+      bs = BL.fromChunks [B.pack (replicate l (fromIntegral (fromEnum 'a'))) | l <- ls]
+  let t = Enc.decode Enc.utf8 bs
+  deepseq t $ return ()
 
 -- ---------------------------------------------------------------------
 
