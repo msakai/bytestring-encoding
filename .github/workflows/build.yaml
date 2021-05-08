@@ -6,7 +6,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        ghc: ['8.4.4', '8.6.5', '8.8.4', '8.10.2']
+        ghc: ['8.4.4', '8.6.5', '8.8.4', '8.10.4']
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - ghc: '8.4.4'
@@ -16,11 +16,11 @@ jobs:
             resolver: 'lts-14.27'
             flags: ''
           - ghc: '8.8.4'
-            resolver: 'lts-16.27'
+            resolver: 'lts-16.31'
             coveralls: true
             flags: '--coverage'
-          - ghc: '8.10.2'
-            resolver: 'nightly-2020-11-01'
+          - ghc: '8.10.4'
+            resolver: 'lts-17.10'
             flags: ''
     steps:
       - uses: actions/checkout@v2
