@@ -11,11 +11,11 @@
 These library provides converter between `ByteString` and `Text` based
 on `GHC.IO.Encoding`.
 Compared to the [text-icu](http://hackage.haskell.org/package/text-icu)
-package, it has only limited feature and platform dependent, but it is
+package, it has only limited feature and is platform dependent, but is
 light-weight and consistent with conversion by `System.IO`.
 
 ## Limitations and Known issues
 
 * There are some cases that conversion can produce incomplete results due to the problem of `GHC.IO.Encoding` API.
-  see https://ghc.haskell.org/trac/ghc/ticket/15553 for details.
+  see https://gitlab.haskell.org/ghc/ghc/-/issues/15553 for details.
   
