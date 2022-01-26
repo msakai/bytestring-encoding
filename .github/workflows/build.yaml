@@ -37,17 +37,21 @@ jobs:
             os: ubuntu-latest
             coveralls: true
             flags: '--coverage'
-          - ghc: '8.10.4'
-            resolver: 'lts-17.10'
+          - ghc: '8.10.7'
+            resolver: 'lts-18.23'
             os: ubuntu-latest
             flags: ''
-          - ghc: '8.10.4'
-            resolver: 'lts-17.10'
+          - ghc: '8.10.7'
+            resolver: 'lts-18.23'
             os: windows-latest
             flags: ''
-          - ghc: '8.10.4'
-            resolver: 'lts-17.10'
+          - ghc: '8.10.7'
+            resolver: 'lts-18.23'
             os: macos-latest
+            flags: ''
+          - ghc: '9.0.2'
+            resolver: 'nightly-2022-01-26'
+            os: ubuntu-latest
             flags: ''
     steps:
       - uses: actions/checkout@v2
