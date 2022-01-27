@@ -49,6 +49,11 @@ jobs:
             resolver: 'lts-18.23'
             os: macos-latest
             flags: ''
+          - ghc: '8.10.7'
+            resolver: 'lts-18.23'
+            os: ubuntu-latest
+            flags: ''
+            text2: true
           - ghc: '9.0.2'
             resolver: 'nightly-2022-01-26'
             os: ubuntu-latest
@@ -78,9 +83,14 @@ jobs:
         run: rm -r ~/.stack/setup-exe-cache
 
       - name: Build
+        shell: bash
         run: |
           echo "resolver: ${{ matrix.resolver }}" > stack.yaml
+          if [[ "${{ matrix.text2 }}" = "true" ]]; then
+            echo "extra-deps: [text-2.0]" >> stack.yaml
+          fi
           stack build --test --no-run-tests --bench --no-run-benchmarks ${{ matrix.flags }}
+
       - name: Test
         run: stack test ${{ matrix.flags }}
 
