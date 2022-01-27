@@ -1,7 +1,6 @@
 # bytestring-encoding: ByteString ↔ Text converter based on GHC.IO.Encoding
 
-[![Build Status (Travis CI)](https://travis-ci.org/msakai/bytestring-encoding.svg?branch=master)](https://travis-ci.org/msakai/bytestring-encoding)
-[![Build Status (GitHub Actions)](https://github.com/msakai/bytestring-encoding/workflows/build/badge.svg)](https://github.com/msakai/bytestring-encoding/actions)
+[![Build Status](https://github.com/msakai/bytestring-encoding/workflows/build/badge.svg)](https://github.com/msakai/bytestring-encoding/actions)
 [![Coverage Status](https://coveralls.io/repos/github/msakai/bytestring-encoding/badge.svg?branch=master)](https://coveralls.io/github/msakai/bytestring-encoding?branch=master)
 [![Hackage](https://img.shields.io/hackage/v/bytestring-encoding.svg)](https://hackage.haskell.org/package/bytestring-encoding)
 [![Hackage Deps](https://img.shields.io/hackage-deps/v/bytestring-encoding.svg)](https://packdeps.haskellers.com/feed?needle=bytestring-encoding)
