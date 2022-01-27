@@ -44,7 +44,7 @@ import System.IO
 encode :: TextEncoding -> T.Text -> B.ByteString
 encode enc = BL.toStrict . L.encode enc . TL.fromStrict
 
--- | Decode a strict 'B.ByteString' to a strit 'T.Text' using a given 'Enc.TextEncoding'.
+-- | Decode a strict 'B.ByteString' to a strict 'T.Text' using a given 'Enc.TextEncoding'.
 decode :: TextEncoding -> B.ByteString -> T.Text
 decode enc = TL.toStrict . L.decode enc . BL.fromStrict
 
