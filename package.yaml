@@ -23,8 +23,8 @@ tested-with: 'GHC==7.10.3 GHC==8.0.2 GHC==8.2.2 GHC==8.4.4 GHC==8.6.5 GHC==8.8.4
 
 dependencies:
 - base >=4.8 && <5
-- bytestring
-- text <2.1
+- bytestring >=0.10.6.0 && <0.12
+- text >=1.2.2.2 && <2.1
 
 library:
   source-dirs: src
