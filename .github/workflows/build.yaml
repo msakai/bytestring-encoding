@@ -8,10 +8,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - ghc: '7.8.4'
-          #   resolver: 'lts-2.22'
-          #   os: ubuntu-latest
-          #   flags: ''
           - ghc: '7.10.3'
             resolver: 'lts-6.35'
             os: ubuntu-latest
