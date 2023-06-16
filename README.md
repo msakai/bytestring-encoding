@@ -6,7 +6,7 @@
 [![Hackage Deps](https://img.shields.io/hackage-deps/v/bytestring-encoding.svg)](https://packdeps.haskellers.com/feed?needle=bytestring-encoding)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
-These library provides converter between `ByteString` and `Text` based
+This library provides converter between `ByteString` and `Text` based
 on `GHC.IO.Encoding`.
 Compared to the [text-icu](http://hackage.haskell.org/package/text-icu)
 package, it has only limited feature and is platform dependent, but is
