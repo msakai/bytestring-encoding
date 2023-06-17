@@ -10,7 +10,7 @@ jobs:
         include:
           - ghc: '7.10.3'
             resolver: 'lts-6.35'
-            os: ubuntu-latest
+            os: ubuntu-20.04
             flags: ''
           - ghc: '8.0.2'
             resolver: 'lts-9.21'
@@ -31,27 +31,30 @@ jobs:
           - ghc: '8.8.4'
             resolver: 'lts-16.31'
             os: ubuntu-latest
+            flags: ''
+          - ghc: '8.10.7'
+            resolver: 'lts-18.23'
+            os: ubuntu-latest
+            flags: ''
+          - ghc: '9.0.2'
+            resolver: 'lts-19.33'
+            os: ubuntu-latest
+            flags: ''
+          - ghc: '9.2.8'
+            resolver: 'lts-20.25'
+            os: ubuntu-latest
             coveralls: true
             flags: '--coverage'
-          - ghc: '8.10.7'
-            resolver: 'lts-18.23'
-            os: ubuntu-latest
-            flags: ''
-          - ghc: '8.10.7'
-            resolver: 'lts-18.23'
+          - ghc: '9.2.8'
+            resolver: 'lts-20.25'
             os: windows-latest
             flags: ''
-          - ghc: '8.10.7'
-            resolver: 'lts-18.23'
+          - ghc: '9.2.8'
+            resolver: 'lts-20.25'
             os: macos-latest
             flags: ''
-          - ghc: '8.10.7'
-            resolver: 'lts-18.23'
-            os: ubuntu-latest
-            flags: ''
-            text2: true
-          - ghc: '9.0.2'
-            resolver: 'nightly-2022-01-26'
+          - ghc: '9.4.5'
+            resolver: 'nightly-2023-06-16'
             os: ubuntu-latest
             flags: ''
     steps:
@@ -82,9 +85,6 @@ jobs:
         shell: bash
         run: |
           echo "resolver: ${{ matrix.resolver }}" > stack.yaml
-          if [[ "${{ matrix.text2 }}" = "true" ]]; then
-            echo "extra-deps: [text-2.0]" >> stack.yaml
-          fi
           stack build --test --no-run-tests --bench --no-run-benchmarks ${{ matrix.flags }}
 
       - name: Test
