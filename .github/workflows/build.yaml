@@ -43,18 +43,25 @@ jobs:
           - ghc: '9.2.8'
             resolver: 'lts-20.25'
             os: ubuntu-latest
+          - ghc: '9.4.8'
+            resolver: 'lts-21.25'
+            os: ubuntu-latest
+            flags: ''
+          - ghc: '9.6.4'
+            resolver: 'lts-22.8'
+            os: ubuntu-latest
             coveralls: true
             flags: '--coverage'
-          - ghc: '9.2.8'
-            resolver: 'lts-20.25'
+          - ghc: '9.6.4'
+            resolver: 'lts-22.8'
             os: windows-latest
             flags: ''
-          - ghc: '9.2.8'
-            resolver: 'lts-20.25'
+          - ghc: '9.6.4'
+            resolver: 'lts-22.8'
             os: macos-latest
             flags: ''
-          - ghc: '9.4.5'
-            resolver: 'nightly-2023-06-16'
+          - ghc: '9.8.1'
+            resolver: 'nightly-2024-02-02'
             os: ubuntu-latest
             flags: ''
     steps:
