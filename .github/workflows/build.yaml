@@ -47,21 +47,25 @@ jobs:
             resolver: 'lts-21.25'
             os: ubuntu-latest
             flags: ''
-          - ghc: '9.6.4'
-            resolver: 'lts-22.8'
+          - ghc: '9.6.6'
+            resolver: 'lts-22.43'
             os: ubuntu-latest
             coveralls: true
             flags: '--coverage'
-          - ghc: '9.6.4'
-            resolver: 'lts-22.8'
+          - ghc: '9.6.6'
+            resolver: 'lts-22.43'
             os: windows-latest
             flags: ''
-          - ghc: '9.6.4'
-            resolver: 'lts-22.8'
+          - ghc: '9.6.6'
+            resolver: 'lts-22.43'
             os: macos-latest
             flags: ''
-          - ghc: '9.8.1'
-            resolver: 'nightly-2024-02-02'
+          - ghc: '9.8.4'
+            resolver: 'lts-23.11'
+            os: ubuntu-latest
+            flags: ''
+          - ghc: '9.10.1'
+            resolver: 'nightly-2025-03-05'
             os: ubuntu-latest
             flags: ''
     steps:
