@@ -10,14 +10,17 @@ jobs:
         include:
           - ghc: '7.10.3'
             resolver: 'lts-6.35'
+            stack-version: '2.11.1'
             os: ubuntu-20.04
             flags: ''
           - ghc: '8.0.2'
             resolver: 'lts-9.21'
+            stack-version: '2.15.5'
             os: ubuntu-latest
             flags: ''
           - ghc: '8.2.2'
             resolver: 'lts-11.22'
+            stack-version: '2.15.5'
             os: ubuntu-latest
             flags: ''
           - ghc: '8.4.4'
@@ -76,7 +79,7 @@ jobs:
         with:
           ghc-version: ${{ matrix.ghc }}
           enable-stack: true
-          stack-version: 'latest'
+          stack-version: ${{ matrix.stack-version || 'latest' }}
           stack-no-global: true
           stack-setup-ghc: true
 
